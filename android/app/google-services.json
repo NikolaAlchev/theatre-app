@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1088798038018",
+    "project_id": "theatre-app-917aa",
+    "storage_bucket": "theatre-app-917aa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088798038018:android:3ae25daf8c3f6e88ddaf1b",
+        "android_client_info": {
+          "package_name": "com.example.theatre_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtWEqi-1c-wHHejOPeL3SMIs8uyy1eMPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
