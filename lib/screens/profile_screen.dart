@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:theatre_app/services/auth_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -114,10 +115,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 width: 250,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
-                  // Add margin bottom
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Log out action
+                    onPressed: () async {
+                      await AuthService().logout(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 46, 46, 46),
@@ -126,15 +126,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: const Text(
                       'LOG OUT',
                       style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );
