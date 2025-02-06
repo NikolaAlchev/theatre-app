@@ -13,28 +13,7 @@ class FavoritesScreen extends StatefulWidget {
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
 
-  final List<Play> plays = [
-    Play(
-      title: 'To the Show',
-      duration: '2h 30min',
-      genre: 'Drama, Comedy',
-      location: 'Skopje, Macedonian National Theatre',
-      description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vitae turpis a libero.',
-      imageUrl:
-      'https://img.freepik.com/free-vector/hand-drawn-theatre-show-poster_23-2149828597.jpg', // Replace with actual image URL
-    ),
-    Play(
-      title: 'Mystery Night',
-      duration: '1h 45min',
-      genre: 'Mystery, Thriller',
-      location: 'Bitola, National Theatre',
-      description:
-      'A suspenseful drama that keeps you on the edge of your seat from start to finish.',
-      imageUrl:
-      'https://img.freepik.com/free-vector/hand-drawn-theatre-show-poster_23-2149828597.jpg', // Replace with actual image URL
-    ),
-  ];
+  final List<Play> plays = [];
 
   @override
   Widget build(BuildContext context) {

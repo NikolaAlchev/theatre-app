@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../models/play.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Play play;
 
-  DetailsScreen({required this.play});
+  const DetailsScreen({super.key, required this.play});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-        title: Text(play.title, style: TextStyle(color: Colors.white)),
+        title: Text(play.title, style: const TextStyle(color: Colors.white)),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
@@ -42,31 +40,70 @@ class DetailsScreen extends StatelessWidget {
                   ),
                 );
               },
-              errorBuilder: (context, error, stackTrace) => Center(
+              errorBuilder: (context, error, stackTrace) => const Center(
                 child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               play.title,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
-              '${play.duration} • ${play.genre}',
+              'Date: ${play.date}',
               style: TextStyle(color: Colors.grey[400]),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 4),
+            Text(
+              'Time: ${play.time}',
+              style: TextStyle(color: Colors.grey[400]),
+            ),
+            const SizedBox(height: 8),
             Text(
               'Location: ${play.location}',
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              play.description,
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              play.description.length > 100
+                  ? '${play.description.substring(0, 600)}...'
+                  : play.description,
+              style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () async {
+                try {
+                  final uri = Uri.parse(play.url);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(
+                      uri,
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Could not open URL')),
+                    );
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error: ${e.toString()}')),
+                  );
+                }
+              },
+              child: const Text(
+                'See more...',
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -74,12 +111,15 @@ class DetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            // Handle Buy Ticket functionality
+            // Buy ticket functionality
           },
-          child: Text('BUY TICKET', style: TextStyle(color: Colors.white),),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 182, 0, 0), // Make the button red
-            minimumSize: Size(double.infinity, 50),
+            backgroundColor: const Color.fromARGB(255, 182, 0, 0),
+            minimumSize: const Size(double.infinity, 50),
+          ),
+          child: const Text(
+            'BUY TICKET',
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ),

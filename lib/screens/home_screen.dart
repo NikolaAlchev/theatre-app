@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/play.dart';
+import '../plays_data.dart';
 import './details_screen.dart';
 import '../widgets/play_card.dart';
 
@@ -13,28 +17,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String activeTab = "REPERTOIRE";
 
-  final List<Play> plays = [
-    Play(
-      title: 'To the Show',
-      duration: '2h 30min',
-      genre: 'Drama, Comedy',
-      location: 'Skopje, Macedonian National Theatre',
-      description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vitae turpis a libero.',
-      imageUrl:
-          'https://img.freepik.com/free-vector/hand-drawn-theatre-show-poster_23-2149828597.jpg', // Replace with actual image URL
-    ),
-    Play(
-      title: 'Mystery Night',
-      duration: '1h 45min',
-      genre: 'Mystery, Thriller',
-      location: 'Bitola, National Theatre',
-      description:
-          'A suspenseful drama that keeps you on the edge of your seat from start to finish.',
-      imageUrl:
-          'https://img.freepik.com/free-vector/hand-drawn-theatre-show-poster_23-2149828597.jpg', // Replace with actual image URL
-    ),
-  ];
+  List<Play> plays = PlayRepository().plays;
 
   @override
   Widget build(BuildContext context) {

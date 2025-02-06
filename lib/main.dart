@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:theatre_app/plays_data.dart';
 import 'package:theatre_app/screens/register_screen.dart';
 import 'firebase_options.dart';
 
@@ -8,6 +9,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await PlayRepository().loadPlays();
+
   runApp(const TheatreApp());
 }
 
