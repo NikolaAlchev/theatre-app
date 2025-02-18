@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theatre_app/services/stripe_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/play.dart';
 
@@ -111,7 +112,7 @@ class DetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            // Buy ticket functionality
+            StripeService.instance.makePayment();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromARGB(255, 182, 0, 0),
