@@ -307,11 +307,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: ElevatedButton.icon(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          await AuthService().register(
+                          String? result = await AuthService().register(
                             emailController.text,
                             passwordController.text,
+                            "${nameController.text} ${surnameController.text}",
+                            usernameController.text,
+                            dobController.text,
                             context,
                           );
+                          if (result == 'Success') {
+                            print("User registered successfully!");
+                          } else {
+                            print("Error: $result");
+                          }
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
