@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:theatre_app/services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../models/play.dart';
+import '../plays_data.dart';
+import '../widgets/play_card.dart';
+import 'details_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -12,10 +18,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool showTickets = true;
   late final Future<Map<String, String>> _userDataFuture;
 
+  List<Play> boughtPlays = [];
+  List<Play> plays = PlayRepository().plays;
+  final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
+    fetchBoughtPlays();
     _userDataFuture = AuthService.getCurrentUser();
+  }
+
+  Future<void> fetchBoughtPlays() async {
+    if (user == null) return;
+
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get();
+
+      if (userDoc.exists) {
+        List<dynamic> boughtPlaysTitles =
+            userDoc['boughtPlays'] ?? []; // Get list of boughtPlays titles
+
+        // Filter the plays list to include only favorite plays
+        setState(() {
+          boughtPlays = plays
+              .where((play) => boughtPlaysTitles.contains(play.title))
+              .toList();
+        });
+      }
+    } catch (e) {
+      print("Error fetching favorites: $e");
+    }
   }
 
   @override
@@ -85,26 +121,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildTicketsView() {
-    return const Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.theaters,
-            size: 70,
-            color: Colors.white,
-          ),
-          SizedBox(height: 10),
-          Text(
-            'My Tickets',
-            style: TextStyle(
+    if (boughtPlays.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.theaters,
+              size: 70,
               color: Colors.white,
-              fontSize: 16,
             ),
-          ),
-        ],
-      ),
-    );
+            SizedBox(height: 10),
+            Text(
+              'My Tickets',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(top: 0),
+        child: Column(
+          children: [
+            // Title for bought tickets
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'My Bought Tickets',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10), // Add some space between title and grid
+            // Grid of bought tickets
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.7,
+                ),
+                itemCount: boughtPlays.length,
+                itemBuilder: (context, index) {
+                  final play = boughtPlays[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(play: play),
+                        ),
+                      );
+                    },
+                    child: PlayCard(play: play),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildUserInfoView() {
@@ -205,10 +288,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 firstDate: DateTime(1900),
                 lastDate: DateTime(2100),
               );
-              if (pickedDate != null) {
-                controller.text =
-                    "${pickedDate.day.toString().padLeft(2, '0')}.${pickedDate.month.toString().padLeft(2, '0')}.${pickedDate.year}";
-              }
+              controller.text =
+                  "${pickedDate?.day.toString().padLeft(2, '0')}.${pickedDate?.month.toString().padLeft(2, '0')}.${pickedDate?.year}";
             },
           ),
         ),

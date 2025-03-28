@@ -20,7 +20,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController dobController = TextEditingController();
 
   bool _isPasswordObscure = true; // Local state to manage password visibility
-  bool _isRepeatPasswordObscure = true; // Local state to manage repeat password visibility
+  bool _isRepeatPasswordObscure =
+      true; // Local state to manage repeat password visibility
 
   @override
   void dispose() {
@@ -50,8 +51,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       firstDate: DateTime(1900),
       lastDate: DateTime(2101),
     );
-    if (pickedDate != null && pickedDate != initialDate) {
-      dobController.text = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+    if (pickedDate != initialDate) {
+      dobController.text =
+          "${pickedDate?.day}/${pickedDate?.month}/${pickedDate?.year}";
     }
   }
 
@@ -86,20 +88,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // Name
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextFormField(
                     controller: nameController,
                     decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.white), // Label text color
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Label text color
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       focusColor: Colors.green,
                       labelText: "Name",
                       hintText: "Enter Name",
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), // Focused border color
+                        borderSide: BorderSide(
+                            color: Colors.white), // Focused border color
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
@@ -109,20 +115,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // Surname
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextFormField(
                     controller: surnameController,
                     decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.white), // Label text color
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Label text color
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       focusColor: Colors.green,
                       labelText: "Surname",
                       hintText: "Enter Surname",
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), // Focused border color
+                        borderSide: BorderSide(
+                            color: Colors.white), // Focused border color
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
@@ -132,16 +142,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // Date of Birth
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextFormField(
                     controller: dobController,
                     readOnly: true,
                     decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.white), // Label text color
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Label text color
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       focusColor: Colors.green,
                       labelText: "Date of Birth",
                       hintText: "Select Date of Birth",
@@ -150,21 +163,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () => _selectDate(context),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), // Focused border color
+                        borderSide: BorderSide(
+                            color: Colors.white), // Focused border color
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     style: TextStyle(fontSize: 16, color: Colors.white),
-                    cursorColor: Colors.white,// Text color white
+                    cursorColor: Colors.white, // Text color white
                   ),
                 ),
                 // Username
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextFormField(
                     controller: usernameController,
                     decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.white), // Label text color
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Label text color
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -172,10 +188,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       labelText: "Username",
                       hintText: "Enter Username",
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), // Focused border color
+                        borderSide: BorderSide(
+                            color: Colors.white), // Focused border color
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                     ),
                     style: TextStyle(fontSize: 16, color: Colors.white),
                     cursorColor: Colors.white,
@@ -183,11 +201,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // EMAIL
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.white), // Label text color
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Label text color
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -195,10 +215,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       labelText: "Email",
                       hintText: "Enter Email",
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), // Focused border color
+                        borderSide: BorderSide(
+                            color: Colors.white), // Focused border color
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -214,12 +236,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // PASSWORD
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextFormField(
                     controller: passwordController,
                     obscureText: _isPasswordObscure,
                     decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.white), // Label text color
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Label text color
                       focusColor: Colors.green,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -239,10 +263,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), // Focused border color
+                        borderSide: BorderSide(
+                            color: Colors.white), // Focused border color
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -258,12 +284,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // Repeat Password
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextFormField(
                     controller: repeatPasswordController,
                     obscureText: _isRepeatPasswordObscure,
                     decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.white), // Label text color
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Label text color
                       focusColor: Colors.green,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -278,15 +306,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         onPressed: () {
                           setState(() {
-                            _isRepeatPasswordObscure = !_isRepeatPasswordObscure;
+                            _isRepeatPasswordObscure =
+                                !_isRepeatPasswordObscure;
                           });
                         },
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), // Focused border color
+                        borderSide: BorderSide(
+                            color: Colors.white), // Focused border color
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -302,7 +333,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // Register button
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
                   child: Center(
                     child: ElevatedButton.icon(
                       onPressed: () async {
@@ -328,7 +360,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           );
                         }
                       },
-                      label: const Text('REGISTER', style: TextStyle(color: Colors.white),),
+                      label: const Text(
+                        'REGISTER',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 46, 46, 46),
                       ),
@@ -348,7 +383,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         );
                       },
-                      child: const Text("Already have an account? Sign In!", style: TextStyle(color: Color.fromARGB(255,122, 122, 122)),),
+                      child: const Text(
+                        "Already have an account? Sign In!",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 122, 122, 122)),
+                      ),
                     ),
                   ],
                 ),

@@ -131,11 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Icons.arrow_drop_down,
                           color: Color.fromARGB(255, 190, 185, 185),
                         ),
-                        items: <String>[
-                          'Location 1',
-                          'Location 2',
-                          'Location 3'
-                        ].map((String value) {
+                        items: <String>['theatre 1', 'theatre 2', 'theatre 3']
+                            .map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Row(
@@ -179,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Icons.arrow_drop_down, // Show default dropdown arrow
                           color: Color.fromARGB(255, 190, 185, 185),
                         ),
-                        items: <String>['Today', 'Tomorrow', 'Next Week']
+                        items: <String>['Today', 'This Month', 'After']
                             .map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -232,7 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: Padding(
-        padding: const EdgeInsets.only(top: 20.0), // Add 20px padding at the top
+        padding:
+            const EdgeInsets.only(top: 20.0), // Add 20px padding at the top
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

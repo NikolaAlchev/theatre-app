@@ -1,4 +1,5 @@
 class Play {
+  final String id;
   final String title;
   final String imageUrl;
   final String description;
@@ -8,6 +9,7 @@ class Play {
   final String url;
 
   Play({
+    required this.id,
     required this.title,
     required this.imageUrl,
     required this.description,
@@ -19,6 +21,7 @@ class Play {
 
   factory Play.fromJson(Map<String, dynamic> json) {
     return Play(
+      id: json['id'] ?? '',
       title: json['title'] ?? 'Unknown',
       imageUrl: json['image'] ?? '',
       description: json['description'] ?? 'No description provided',
@@ -27,5 +30,18 @@ class Play {
       location: json['location'] ?? 'Unknown location',
       url: json['url'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'image': imageUrl,
+      'description': description,
+      'date': date,
+      'time': time,
+      'location': location,
+      'url': url,
+    };
   }
 }

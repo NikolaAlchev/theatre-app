@@ -8,15 +8,11 @@ import '../services/shared_pref.dart';
 class AuthService {
   final SharedPref _sharedPref = SharedPref.instance;
 
-  Future<String?> register(
-      String email,
-      String password,
-      String fullName,
-      String username,
-      String dateOfBirth,
-      BuildContext context) async {
+  Future<String?> register(String email, String password, String fullName,
+      String username, String dateOfBirth, BuildContext context) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -28,15 +24,18 @@ class AuthService {
           'fullName': fullName,
           'username': username,
           'email': email,
+          'boughtPlays': [],
+          'favorites': [],
           'dateOfBirth': dateOfBirth,
-          'createdAt': FieldValue.serverTimestamp(),
+          'createdAt': FieldValue.serverTimestamp()
         });
 
         _sharedPref.setEmail(email);
 
         await Future.delayed(const Duration(seconds: 1));
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()));
 
         return 'Success';
       } else {
@@ -55,13 +54,18 @@ class AuthService {
     }
   }
 
-  Future<String?> login(String email, String password, BuildContext context) async {
+  Future<String?> login(
+      String email, String password, BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
       _sharedPref.setEmail(email);
-      await _sharedPref.getLogged() == false ? _sharedPref.setLogged(true) : null;
+      await _sharedPref.getLogged() == false
+          ? _sharedPref.setLogged(true)
+          : null;
       Future.delayed(const Duration(seconds: 2), () {
-        Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(builder: (_) => const MainScreen()));
+        Navigator.of(context, rootNavigator: true)
+            .push(MaterialPageRoute(builder: (_) => const MainScreen()));
       });
       return 'Success';
     } on FirebaseAuthException catch (e) {
@@ -82,7 +86,8 @@ class AuthService {
       _sharedPref.setEmail(null);
     });
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      Navigator.of(context, rootNavigator: true)
+          .push(MaterialPageRoute(builder: (_) => const LoginScreen()));
     });
   }
 
@@ -108,7 +113,10 @@ class AuthService {
         throw Exception("No user is logged in.");
       }
 
-      DocumentSnapshot userData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      DocumentSnapshot userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
 
       if (userData.exists) {
         var data = userData.data() as Map<String, dynamic>;
@@ -124,5 +132,20 @@ class AuthService {
     } catch (e) {
       throw Exception('Error fetching user data: $e');
     }
+  }
+
+  static Future<List<Map<String, dynamic>>> getFavoritePlays() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('favorites')
+        .get();
+
+    return snapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
   }
 }

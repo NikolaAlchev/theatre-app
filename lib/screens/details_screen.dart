@@ -36,7 +36,7 @@ class DetailsScreen extends StatelessWidget {
                   child: CircularProgressIndicator(
                     value: loadingProgress.expectedTotalBytes != null
                         ? loadingProgress.cumulativeBytesLoaded /
-                        (loadingProgress.expectedTotalBytes ?? 1)
+                            (loadingProgress.expectedTotalBytes ?? 1)
                         : null,
                   ),
                 );
@@ -112,7 +112,7 @@ class DetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            StripeService.instance.makePayment();
+            StripeService.instance.makePayment(play.title);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromARGB(255, 182, 0, 0),
