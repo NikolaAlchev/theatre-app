@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: 60,
+        toolbarHeight: 30,
         backgroundColor: const Color.fromARGB(255, 46, 46, 46),
         elevation: 0,
         title: Column(
@@ -134,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      // Location Filter
                       DropdownButton<String>(
                         value: selectedLocation,
                         dropdownColor: Colors.black,
@@ -169,7 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       const SizedBox(width: 20),
 
-                      // Date Picker
                       GestureDetector(
                         onTap: () => _selectDate(context),
                         child: Container(

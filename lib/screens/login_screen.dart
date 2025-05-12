@@ -13,169 +13,220 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool _isPasswordVisible = false; // Track password visibility
+  bool _isPasswordVisible = false;
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
-    super.dispose();
     emailController.dispose();
     passwordController.dispose();
+    super.dispose();
   }
 
   bool isValidEmail(String email) {
-    RegExp emailRegex = RegExp(
-      r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+',
-      caseSensitive: false,
-    );
-
-    return emailRegex.hasMatch(email);
+    return RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+', caseSensitive: false)
+        .hasMatch(email);
   }
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 100, bottom: 50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "LOG IN",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelStyle: const TextStyle(color: Colors.white), // Label text color
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30), // Rounded corners
-                    ),
-                    focusColor: Colors.green,
-                    labelText: "Email",
-                    hintText: "Enter Email",
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white), // Focused border color
-                      borderRadius: BorderRadius.circular(30), // Rounded corners on focus
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    } else if (!isValidEmail(value)) {
-                      return 'Email not valid!';
-                    }
-                    return null;
-                  },
-                  style: const TextStyle(fontSize: 16, color: Colors.white), // Text color
-                  cursorColor: Colors.white, // Cursor color
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  controller: passwordController,
-                  obscureText: !_isPasswordVisible, // Toggle based on _isPasswordVisible
-                  decoration: InputDecoration(
-                    labelStyle: const TextStyle(color: Colors.white), // Label text color
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30), // Rounded corners
-                    ),
-                    focusColor: Colors.green,
-                    labelText: "Password",
-                    hintText: "Enter password",
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white), // Focused border color
-                      borderRadius: BorderRadius.circular(30), // Rounded corners on focus
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.white, // Icon color
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isPasswordVisible = !_isPasswordVisible; // Toggle visibility
-                        });
-                      },
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    } else if (value.length < 6) {
-                      return 'Password should not have less than 6 characters.';
-                    }
-                    return null;
-                  },
-                  style: const TextStyle(fontSize: 16, color: Colors.white), // Text color
-                  cursorColor: Colors.white, // Cursor color
-                ),
-              ),
-
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
-                child: Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        await AuthService().login(
-                          emailController.text,
-                          passwordController.text,
-                          context,
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please fill input')),
-                        );
-                      }
-                    },
-                    label: const Text('LOG IN', style: TextStyle(color: Colors.white),),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 46, 46, 46),
-                    ),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterScreen(),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.only(left: 8, right: 8, bottom: bottomInset),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const Spacer(flex: 1),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 100, bottom: 50),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "LOG IN",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    child: const Text("Don't have an account? Register!", style: TextStyle(color: Color.fromARGB(255,122, 122, 122))),
+                      ),
+                      Padding(
+                        padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            labelStyle: const TextStyle(color: Colors.white),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            labelText: "Email",
+                            hintText: "Enter Email",
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            } else if (!isValidEmail(value)) {
+                              return 'Email not valid!';
+                            }
+                            return null;
+                          },
+                          style:
+                          const TextStyle(fontSize: 16, color: Colors.white),
+                          cursorColor: Colors.white,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                        child: TextFormField(
+                          controller: passwordController,
+                          obscureText: !_isPasswordVisible,
+                          decoration: InputDecoration(
+                            labelStyle: const TextStyle(color: Colors.white),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            labelText: "Password",
+                            hintText: "Enter password",
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            } else if (value.length < 6) {
+                              return 'Password should not have less than 6 characters.';
+                            }
+                            return null;
+                          },
+                          style:
+                          const TextStyle(fontSize: 16, color: Colors.white),
+                          cursorColor: Colors.white,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                        child: Center(
+                          child: _isLoading
+                              ? const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white),
+                          )
+                              : ElevatedButton.icon(
+                            onPressed: () async {
+                              if (!_formKey.currentState!.validate()) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                      Text('Please fill input')),
+                                );
+                                return;
+                              }
+                              setState(() {
+                                _isLoading = true;
+                                _errorMessage = null;
+                              });
+
+                              final result = await AuthService().login(
+                                emailController.text,
+                                passwordController.text,
+                                context,
+                              );
+
+                              if (result != 'Success') {
+                                setState(() {
+                                  _isLoading = false;
+                                  _errorMessage = result;
+                                });
+                              }
+                            },
+                            label: const Text('LOG IN',
+                                style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                              const Color.fromARGB(255, 46, 46, 46),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (_errorMessage != null) ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            _errorMessage!,
+                            style:
+                            const TextStyle(color: Colors.red, fontSize: 14),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "Don't have an account? Register!",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 122, 122, 122)),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(flex: 2),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

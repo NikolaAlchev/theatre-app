@@ -79,16 +79,16 @@ class AuthService {
     }
   }
 
-  // Logout user
-  Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut().then((value) {
+  Future<bool> logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
       _sharedPref.setLogged(false);
       _sharedPref.setEmail(null);
-    });
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context, rootNavigator: true)
-          .push(MaterialPageRoute(builder: (_) => const LoginScreen()));
-    });
+      return true;
+    } catch (e) {
+      print('Logout failed: $e');
+      return false;
+    }
   }
 
   Future<String?> getEmail() async {
@@ -147,5 +147,18 @@ class AuthService {
     return snapshot.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
+  }
+
+  static Future<void> updatePassword(
+      String currentPassword, String newPassword) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) throw FirebaseAuthException(
+        code: 'no-current-user', message: 'No user is currently signed in.');
+
+    final cred = EmailAuthProvider.credential(
+        email: user.email!, password: currentPassword);
+    await user.reauthenticateWithCredential(cred);
+
+    await user.updatePassword(newPassword);
   }
 }
